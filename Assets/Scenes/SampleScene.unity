@@ -1247,6 +1247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clientsCounter: {fileID: 776905254}
+  scoreCounter: {fileID: 1603509981}
 --- !u!114 &989721682
 MonoBehaviour:
   m_ObjectHideFlags: 0

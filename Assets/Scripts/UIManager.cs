@@ -9,6 +9,8 @@ public class UIManager : NetworkBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI clientsCounter;
+
+    [SerializeField]
     private TextMeshProUGUI scoreCounter;
     private NetworkVariable<int> playersNum = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone);
     public static UIManager instance;
@@ -35,8 +37,9 @@ public class UIManager : NetworkBehaviour
         NetworkManager.Singleton.StartClient();
     }
 
-    public void UpdateScore(int score)
+    [ServerRpc]
+    public void UpdateScoreServerRpc(int score)
     {
-        scoreCounter.text = score.ToString();
+        UIManager.instance.scoreCounter.text = score.ToString();
     }
 }

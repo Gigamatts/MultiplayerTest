@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour
     InputAction movement, turning, shooting;
     [SerializeField]
     GameObject bulletPrefab;
+    public UIManager playerUI;
     int score = 0;
 
 
@@ -75,7 +76,7 @@ public class PlayerController : NetworkBehaviour
     {
         score += points;
         Debug.Log(score);
-        UIManager.instance.UpdateScore(score);
+        UIManager.instance.UpdateScoreServerRpc(score);
         return;
     }
 }
