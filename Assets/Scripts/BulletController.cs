@@ -27,8 +27,7 @@ public class BulletController : NetworkBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit");
-            player.AddPoints(1);
+            player.AddPointsClientRpc(1);
             NetworkObject.Destroy(gameObject);
         }
     }

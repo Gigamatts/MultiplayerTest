@@ -72,11 +72,11 @@ public class PlayerController : NetworkBehaviour
         bullet.GetComponent<BulletController>().player = this;
     }
 
-    public void AddPoints(int points)
+    [ClientRpc]
+    public void AddPointsClientRpc(int points)
     {
+        if(!IsOwner) return;
         score += points;
-        Debug.Log(score);
-        UIManager.instance.UpdateScoreServerRpc(score);
-        return;
+        UIManager.instance.UpdateScore(score);
     }
 }

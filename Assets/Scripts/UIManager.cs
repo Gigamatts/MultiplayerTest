@@ -37,8 +37,7 @@ public class UIManager : NetworkBehaviour
         NetworkManager.Singleton.StartClient();
     }
 
-    [ServerRpc]
-    public void UpdateScoreServerRpc(int score)
+    public void UpdateScore(int score)
     {
         UIManager.instance.scoreCounter.text = score.ToString();
     }
