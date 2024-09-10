@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using TMPro;
 
 
 public class SeekerMovement : NetworkBehaviour
@@ -11,6 +12,11 @@ public class SeekerMovement : NetworkBehaviour
     private NetworkVariable<Vector3> transformVar = new NetworkVariable<Vector3>();
 
     public NodeGrid grid;
+
+    public float smoothTime = 0.3F;
+
+    private Vector3 velocity = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,12 +36,15 @@ public class SeekerMovement : NetworkBehaviour
         if (IsOwner)
         {
             //UpdateSeekerClientRpc(this.transform);
-         //   SetMyValueClientRpc(this.transform.position);
+            //   SetMyValueClientRpc(this.transform.position);
+            //transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
         }
         if (!IsOwner)
         {
             this.transform.position = transformVar.Value;
         }
+
+
         
     }
     private IEnumerator moveToTarget()
@@ -64,11 +73,6 @@ public class SeekerMovement : NetworkBehaviour
 
             while (Time.time < startTime + totalDuration)
             {
-                if (grid.path[grid.path.Count - 1].worldPosition != oldPosition)
-                {
-                    break;
-                }
-
                 float elapsedTime = Time.time - startTime;
 
                 float normalizedTime = elapsedTime / totalDuration;
@@ -76,6 +80,13 @@ public class SeekerMovement : NetworkBehaviour
                 transform.position = Vector3.Lerp(transform.position, n.worldPosition + new Vector3(0, 0.4f, 0), normalizedTime);
 
                 yield return null;
+
+                if (grid.path[grid.path.Count - 1].worldPosition != oldPosition)
+                {
+                    break;
+                }
+
+                
             }
 
             /*for (float timer = 0; timer < 1; timer += 0.01f)
