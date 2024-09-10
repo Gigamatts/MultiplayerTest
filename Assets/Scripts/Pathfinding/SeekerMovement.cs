@@ -8,17 +8,34 @@ public class SeekerMovement : NetworkBehaviour
 {
     private Coroutine moveToTargetCoroutine;
 
+    private NetworkVariable<Vector3> transformVar = new NetworkVariable<Vector3>();
+
     public NodeGrid grid;
     // Start is called before the first frame update
     void Start()
     {
-        moveToTargetCoroutine = StartCoroutine(moveToTarget());
+        if (IsOwner)
+        {
+            moveToTargetCoroutine = StartCoroutine(moveToTarget());
+            SetMyValueClientRpc(this.transform.position);
+        }
+
         grid = GameObject.Find("A*").GetComponent<NodeGrid>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (IsOwner)
+        {
+            //UpdateSeekerClientRpc(this.transform);
+            SetMyValueClientRpc(this.transform.position);
+        }
+        if (!IsOwner)
+        {
+            this.transform.position = transformVar.Value;
+        }
         
     }
     private IEnumerator moveToTarget()
@@ -40,7 +57,28 @@ public class SeekerMovement : NetworkBehaviour
                 yield return null;
             }
 
-            for (float timer = 0; timer < 1; timer += 0.01f)
+            float totalDuration = 1f;
+
+            // Calcula o tempo de início
+            float startTime = Time.time;
+
+            while (Time.time < startTime + totalDuration)
+            {
+                if (grid.path[grid.path.Count - 1].worldPosition != oldPosition)
+                {
+                    break;
+                }
+
+                float elapsedTime = Time.time - startTime;
+
+                float normalizedTime = elapsedTime / totalDuration;
+
+                transform.position = Vector3.Lerp(transform.position, n.worldPosition + new Vector3(0, 0.4f, 0), normalizedTime);
+
+                yield return null;
+            }
+
+            /*for (float timer = 0; timer < 1; timer += 0.01f)
             {
                 //if target moves, escape loop
                 if (grid.path[grid.path.Count - 1].worldPosition != oldPosition)
@@ -52,16 +90,17 @@ public class SeekerMovement : NetworkBehaviour
                 transform.position = Vector3.Lerp(transform.position, n.worldPosition + new Vector3(0, 0.4f, 0), timer);
 
                 yield return new WaitForEndOfFrame();
-            }
+            }*/
         }
 
         //if target moves, restart loop
         moveToTargetCoroutine = StartCoroutine(moveToTarget());
     }
 
-    [ServerRpc]
-    public void UpdateSeekerServerRpc()
-    {
 
+    [ClientRpc]
+    public void SetMyValueClientRpc(Vector3 newValue)
+    {
+        transformVar.Value = newValue; // This will sync automatically
     }
 }
