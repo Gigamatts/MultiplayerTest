@@ -32,6 +32,7 @@ public class PlayerController : NetworkBehaviour
     {
         anim = GetComponent<Animator>();
         transform.position = new Vector3 (Random.Range(-5,5), 0.5f, Random.Range(-5,5));
+        this.name += Random.Range(1, 100);
     }
 
     // Update is called once per frame
@@ -60,7 +61,7 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    [ServerRpc]
+    [ServerRpc] //from a client to a server
     private void ShootBulletServerRpc()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position + transform.forward, transform.rotation);
@@ -72,7 +73,7 @@ public class PlayerController : NetworkBehaviour
         bullet.GetComponent<BulletController>().player = this;
     }
 
-    [ClientRpc]
+    [ClientRpc] //from a server to a client
     public void AddPointsClientRpc(int points)
     {
         if(!IsOwner) return;

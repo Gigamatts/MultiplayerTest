@@ -7,6 +7,8 @@ using TMPro;
 
 public class UIManager : NetworkBehaviour
 {
+    public GameObject seekerPrefab;
+
     [SerializeField]
     private TextMeshProUGUI clientsCounter;
 
@@ -31,12 +33,23 @@ public class UIManager : NetworkBehaviour
     public void StartHost()
     {
         NetworkManager.Singleton.StartHost();
+        
     }
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
     }
 
+    [ServerRpc]
+    public void StartSeekerServerRpc()
+    {
+        GameObject seeker = Instantiate(seekerPrefab, new Vector3(Random.Range(-5, 5), 0.5f, Random.Range(-5, 5)),transform.rotation);
+        NetworkObject networkObject = seeker.GetComponent<NetworkObject>();
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+        }
+    }
     public void UpdateScore(int score)
     {
         UIManager.instance.scoreCounter.text = score.ToString();

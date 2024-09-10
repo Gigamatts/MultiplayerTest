@@ -15,6 +15,10 @@ public class Pathfinding : MonoBehaviour
 
     private void Update()
     {
+        //finds Seeker
+        seeker = GameObject.FindGameObjectWithTag("Seeker").transform;
+
+        //Makes a list of players
         target.Clear();
         foreach(GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
         {
@@ -22,10 +26,13 @@ public class Pathfinding : MonoBehaviour
         }
         if (target.Count == 0)
             return;
+
+        //finds closest player
         int closestPlayer = 0;
         float closestDistance = Vector3.Distance(seeker.position, target[0].transform.position);
         for (int i = 0; i < target.Count; i++)
         {
+            //Debug.Log(target[i].name + " " + Vector3.Distance(seeker.position, target[i].transform.position));
             if (Vector3.Distance(seeker.position, target[i].transform.position) < closestDistance)
             {
                 closestPlayer = i;

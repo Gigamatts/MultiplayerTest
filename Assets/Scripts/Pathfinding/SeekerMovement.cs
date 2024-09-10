@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class SeekerMovement : MonoBehaviour
+
+public class SeekerMovement : NetworkBehaviour
 {
     private Coroutine moveToTargetCoroutine;
 
@@ -11,6 +13,7 @@ public class SeekerMovement : MonoBehaviour
     void Start()
     {
         moveToTargetCoroutine = StartCoroutine(moveToTarget());
+        grid = GameObject.Find("A*").GetComponent<NodeGrid>();
     }
 
     // Update is called once per frame
@@ -34,9 +37,9 @@ public class SeekerMovement : MonoBehaviour
             {
                 Debug.Log("ACHEI VOCE");
                 StopCoroutine(moveToTargetCoroutine);
-                Debug.Log("PORQUEEEEE");
-
+                yield return null;
             }
+
             for (float timer = 0; timer < 1; timer += 0.01f)
             {
                 //if target moves, escape loop
@@ -54,5 +57,11 @@ public class SeekerMovement : MonoBehaviour
 
         //if target moves, restart loop
         moveToTargetCoroutine = StartCoroutine(moveToTarget());
+    }
+
+    [ServerRpc]
+    public void UpdateSeekerServerRpc()
+    {
+
     }
 }
