@@ -27,8 +27,11 @@ public class UIManager : NetworkBehaviour
     void Update()
     {
         clientsCounter.text = playersNum.Value.ToString();
-        if (!IsServer) return;
-        playersNum.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        if (!IsOwner) return;
+        if (IsServer)
+        {
+            playersNum.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        }
     }
     public void StartHost()
     {

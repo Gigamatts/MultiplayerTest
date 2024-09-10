@@ -1907,7 +1907,7 @@ MonoBehaviour:
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 172.17.14.9
-    Port: 7777
+    Port: 5058
     ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0

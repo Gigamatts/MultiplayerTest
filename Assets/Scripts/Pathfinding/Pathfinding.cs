@@ -16,7 +16,15 @@ public class Pathfinding : MonoBehaviour
     private void Update()
     {
         //finds Seeker
-        seeker = GameObject.FindGameObjectWithTag("Seeker").transform;
+        try
+        {
+            seeker = GameObject.FindGameObjectWithTag("Seeker").transform;
+        } 
+        catch
+        {
+            return;
+        }
+        
 
         //Makes a list of players
         target.Clear();
@@ -25,7 +33,9 @@ public class Pathfinding : MonoBehaviour
             target.Add(obj.transform);
         }
         if (target.Count == 0)
+        {
             return;
+        }
 
         //finds closest player
         int closestPlayer = 0;

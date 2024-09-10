@@ -17,7 +17,7 @@ public class SeekerMovement : NetworkBehaviour
         if (IsOwner)
         {
             moveToTargetCoroutine = StartCoroutine(moveToTarget());
-            SetMyValueClientRpc(this.transform.position);
+           // SetMyValueClientRpc(this.transform.position);
         }
 
         grid = GameObject.Find("A*").GetComponent<NodeGrid>();
@@ -30,7 +30,7 @@ public class SeekerMovement : NetworkBehaviour
         if (IsOwner)
         {
             //UpdateSeekerClientRpc(this.transform);
-            SetMyValueClientRpc(this.transform.position);
+         //   SetMyValueClientRpc(this.transform.position);
         }
         if (!IsOwner)
         {
